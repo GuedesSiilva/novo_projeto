@@ -1,6 +1,6 @@
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Scanner;
+import java.time.format.DateTimeFormatter;
 
 public class Main {
     private static ArrayList<Aluno> listaAlunos = new ArrayList<>();
@@ -96,12 +96,25 @@ public class Main {
         }
     }
     public static void listar_alunos (){
-        for(Aluno a : listaAlunos){
-            System.out.println(a);
+        System.out.println(" == Alunos Listados == ");
+        if(listaAlunos.isEmpty()) {
+            System.out.println("Está lista está vazia!!! \n");
+        }else{
+            for (Aluno A : listaAlunos) {
+                System.out.println(A);
+            }
         }
+        Alunos();
     }
     public static void add_aluno (){
+        String Nome = Leitura.dados("Digite o nome do aluno:");
+        String data = Leitura.dados("Digite a data de nascimento do aluno:");
 
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        LocalDate dataNascimento = LocalDate.parse(data, formatter);
+
+        Aluno aluno = new Aluno(Nome,dataNascimento);
+        System.out.println("Aluno Criado com sucesso");
     }
     public static void edit_aluno (){
 
@@ -110,12 +123,28 @@ public class Main {
 
     }
     public static void listar_turmas (){
-        for(Turma t : listaTurmas){
-            System.out.println(t);
+        System.out.println(" == Alunos Listados == ");
+        if(listaTurmas.isEmpty()) {
+            System.out.println("Está lista está vazia!!! \n");
+        }else{
+            for (Turma T : listaTurmas) {
+                System.out.println(T);
+            }
         }
     }
     public static void add_turma (){
+        String Curso = Leitura.dados("Digite o nome do curso:");
+        String Sigla = Leitura.dados("Digite a sigla referente ao curso:");
+        String Periodo = Leitura.dados("""
+                Escolha qual é o periodo da turma:
+                - MATUTINO
+                - VESPERTINO
+                - NOTURNO
+                - INTEGRAL
+                """);
 
+
+        System.out.println("Turma Criada com sucesso");
     }
     public static void edit_turma (){
 

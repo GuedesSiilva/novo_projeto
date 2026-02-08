@@ -7,10 +7,12 @@ public class Aluno {
     private LocalDate dataNascimento;
     private Turma turma;
 
-    public Aluno(String nome, LocalDate dataNascimento){
+    public Aluno(String nome, LocalDate dataNascimento, Turma turma){
         this.nome = nome;
+        this.dataNascimento = dataNascimento;
         contador++;
         this.id = contador;
+        this.turma = turma;
     }
 
     public static int getContador() {
@@ -19,4 +21,9 @@ public class Aluno {
     public int getId(){
         return id;
     }
+
+    public String toString(){
+        return id + " | " + nome + " | " + dataNascimento + " | " + turma;
+    }
+
 }

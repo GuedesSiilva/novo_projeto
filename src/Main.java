@@ -99,6 +99,7 @@ public class Main {
         System.out.println(" == Alunos Listados == ");
         if(listaAlunos.isEmpty()) {
             System.out.println("Está lista está vazia!!! \n");
+            Alunos();
         }else{
             for (Aluno A : listaAlunos) {
                 System.out.println(A);
@@ -109,47 +110,129 @@ public class Main {
     public static void add_aluno (){
         String Nome = Leitura.dados("Digite o nome do aluno:");
         String data = Leitura.dados("Digite a data de nascimento do aluno:");
-
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        LocalDate dataNascimento = LocalDate.parse(data, formatter);
-
-        Aluno aluno = new Aluno(Nome,dataNascimento);
+        System.out.println(" == Turmas Disponiveis == ");
+        if(listaTurmas.isEmpty()) {
+            System.out.println("Está lista está vazia!!! \n");
+            return;
+        }else{
+            for (Turma T : listaTurmas) {
+                System.out.println(" - " + T);
+            }
+        }
+        String sigla = Leitura.dados("Escolha uma das turmas disponiveis pela sigla:");
+        Turma turma = null;
+        for (Turma T : listaTurmas) {
+            if (T.getSigla().equalsIgnoreCase(sigla)){
+            turma = T;
+            break;
+            }
+        }
+        if (turma == null){
+            System.out.println("Turma não encontrada. Aluno não cadastrado");
+            Alunos();
+        }
+        LocalDate dataNascimento = null;
+        try {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+            dataNascimento = LocalDate.parse(data, formatter);
+        }catch (Exception e){
+            System.out.println("Data Inválida! Use o formato dd/mm/yyyy");
+            return;
+        }
+        Aluno aluno = new Aluno(Nome,dataNascimento,turma);
         System.out.println("Aluno Criado com sucesso");
+        listaAlunos.add(aluno);
+        Alunos();
     }
     public static void edit_aluno (){
 
     }
     public static void excluir_aluno (){
-
+        System.out.println(" == Alunos cadastrados no sistema == ");
+        if(listaAlunos.isEmpty()) {
+            System.out.println("Está lista está vazia!!! \n");
+            Alunos();
+        }else{
+            for (Aluno A : listaAlunos) {
+                System.out.println(" - " +A);
+            }
+        }
+        String id = Leitura.dados("Digite o id do aluno a ser removido:");
+        int idSelecionado = Integer.parseInt(id);
+        Aluno aluno = null ;
+        for (Aluno A : listaAlunos) {
+            if (A.getId() == idSelecionado){
+                aluno = A;
+                break;
+            }
+        }
+        if (aluno == null){
+            System.out.println("Aluno não encontrado.");
+        }
+        else {
+            listaTurmas.remove(aluno);
+            System.out.println("Aluno Removido com sucesso!");
+        }
+        Alunos();
     }
     public static void listar_turmas (){
-        System.out.println(" == Alunos Listados == ");
+        System.out.println(" == Turmas Disponiveis == ");
         if(listaTurmas.isEmpty()) {
             System.out.println("Está lista está vazia!!! \n");
+            Turmas();
         }else{
             for (Turma T : listaTurmas) {
                 System.out.println(T);
             }
         }
+        Turmas();
     }
     public static void add_turma (){
         String Curso = Leitura.dados("Digite o nome do curso:");
         String Sigla = Leitura.dados("Digite a sigla referente ao curso:");
-        String Periodo = Leitura.dados("""
+        String escolha = Leitura.dados("""
                 Escolha qual é o periodo da turma:
-                - MATUTINO
-                - VESPERTINO
-                - NOTURNO
-                - INTEGRAL
+                1 - MATUTINO
+                2 - VESPERTINO
+                3 - NOTURNO
+                4 - INTEGRAL
                 """);
+        int opcao = Integer.parseInt(escolha);
+        Periodo[] periodos = Periodo.values();
+        Periodo periodoEscolhido = periodos[opcao-1];
 
-
-        System.out.println("Turma Criada com sucesso");
+        Turma turma = new Turma(Curso,Sigla,periodoEscolhido);
+        System.out.println("Turma criada com sucesso!!");
+        listaTurmas.add(turma);
+        Turmas();
     }
     public static void edit_turma (){
 
     }
     public static void excluir_turma (){
-
+        System.out.println(" == Turmas Disponiveis == ");
+        if(listaTurmas.isEmpty()) {
+            System.out.println("Está lista está vazia!!! \n");
+            Alunos();
+        }else{
+            for (Turma T : listaTurmas) {
+                System.out.println(" - " +T);
+            }
+        }
+        String sigla = Leitura.dados("Escolha uma das turmas disponiveis pela sigla:");
+        Turma turma = null;
+        for (Turma T : listaTurmas) {
+            if (T.getSigla().equalsIgnoreCase(sigla)){
+                turma = T;
+                break;
+            }
+        }
+        if (turma == null){
+            System.out.println("Turma não encontrada.");
+        }
+        else {
+            listaTurmas.remove(turma);
+            System.out.println("Turma Removida com sucesso!");
+        }
     }
 }

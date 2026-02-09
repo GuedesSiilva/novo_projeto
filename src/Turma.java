@@ -17,4 +17,16 @@ public class Turma {
     public String toString(){
         return curso + " | " + sigla + " | " + periodo;
     }
+
+    public void setCurso(String curso) {
+        this.curso = curso;
+    }
+
+    public void setSigla(String sigla) {
+        this.sigla = sigla;
+    }
+
+    public void setPeriodo(Periodo periodo) {
+        this.periodo = periodo;
+    }
 }

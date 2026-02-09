@@ -26,4 +26,15 @@ public class Aluno {
         return id + " | " + nome + " | " + dataNascimento + " | " + turma;
     }
 
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public void setDataNascimento(LocalDate dataNascimento) {
+        this.dataNascimento = dataNascimento;
+    }
+
+    public void setTurma(Turma turma) {
+        this.turma = turma;
+    }
 }

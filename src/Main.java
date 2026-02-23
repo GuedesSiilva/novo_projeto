@@ -399,7 +399,7 @@ public class Main {
 
         for (Turma T : listaTurmas)
         {
-            if (T.getSigla().equalsIgnoreCase(sigla)){
+            if (T.getSigla().equalsIgnoreCase(sigla )){
                 return false;
             }
         }

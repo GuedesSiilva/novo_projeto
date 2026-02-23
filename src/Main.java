@@ -316,7 +316,7 @@ public class Main {
         }
         String sigla = Leitura.dados("Digite a sigla da turma a ser editada:");
         while(!ValidarSigla(sigla)){
-            System.out.println("Sigla INVÁLIDA");
+            System.out.println("Sigla INVÁLIDA! Não pode ser repetida, nem maior que 6 caracteres.");
             sigla = Leitura.dados("Digite a sigla da turma a ser editada:");
         }
         sigla = sigla.toUpperCase();
@@ -343,12 +343,12 @@ public class Main {
                 Periodo periodoEscolhido = periodos[opcao-1];
                 String NovoCurso = Leitura.dados("Digite o nome do curso:");
                 while (!ValidarTextos(NovoCurso)) {
-                    System.out.println("Nome INVÁLIDO! Não utilize numeros e nem caracteres especias");
+                    System.out.println("Nome INVÁLIDO! Não utilize números e nem caracteres especias");
                     NovoCurso = Leitura.dados("Digite o nome do aluno:");
                 }
                 String NovaSigla = Leitura.dados("Digite a sigla referente ao curso:");
                 while(!ValidarSigla(NovaSigla)){
-                    System.out.println("Sigla INVÁLIDA");
+                    System.out.println("Sigla INVÁLIDA! Não pode ser repetida, nem maior que 6 caracteres.");
                     sigla = Leitura.dados("Digite a sigla da turma a ser editada:");
                 }
                 T.setCurso(NovoCurso);

@@ -19,15 +19,12 @@ public class Main {
         String opcao = Leitura.dados("Digite a opção desejada:");
         switch (opcao){
             case "1":
-                opcao="1";
                 Alunos();
                 break;
             case "2":
-                opcao="2";
                 Turmas();
                 break;
             case "3":
-                opcao="3";
                 System.out.println("Saindo...");
                 System.exit(0);
                 break;
@@ -119,7 +116,7 @@ public class Main {
         String data = Leitura.dados("Digite a data de nascimento do aluno:");
         System.out.println(" == Turmas Disponiveis == ");
         if (listaTurmas.isEmpty()) {
-            System.out.println("Está lista está vazia!!! \n");
+            System.out.println("Está lista está vazia!! \n");
             Alunos();
         } else {
             for (Turma T : listaTurmas) {
@@ -405,6 +402,6 @@ public class Main {
         }
         String SiglaCorreta = sigla.replaceAll("\\s","");
 
-        return sigla.equals(SiglaCorreta) && sigla.length() < 7 && true;
+        return sigla.equals(SiglaCorreta) && sigla.length() < 7;
     }
 }

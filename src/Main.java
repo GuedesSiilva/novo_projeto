@@ -1,7 +1,6 @@
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.time.format.DateTimeFormatter;
-import java.util.Locale;
 
 public class Main {
     private static ArrayList<Aluno> listaAlunos = new ArrayList<>();
@@ -121,17 +120,13 @@ public class Main {
         System.out.println(" == Turmas Disponiveis == ");
         if (listaTurmas.isEmpty()) {
             System.out.println("Está lista está vazia!!! \n");
-            return;
+            Alunos();
         } else {
             for (Turma T : listaTurmas) {
                 System.out.println(" - " + T);
             }
         }
         String sigla = Leitura.dados("Escolha uma das turmas disponiveis pela sigla:");
-        while(sigla.isBlank() && sigla.length() > 5){
-            System.out.println("Sigla INVÁLIDA");
-            sigla = Leitura.dados("Escolha uma das turmas disponiveis pela sigla:");
-        }
         Turma turma = null;
         for (Turma T : listaTurmas) {
             if (T.getSigla().equalsIgnoreCase(sigla)) {
@@ -140,8 +135,7 @@ public class Main {
             }
         }
         if (turma == null) {
-            System.out.println("Turma não encontrada. Aluno não cadastrado");
-            Alunos();
+            System.out.println("Turma não encontrada.");
         }
         LocalDate dataNascimento = null;
         try {
@@ -283,7 +277,7 @@ public class Main {
             4 - INTEGRAL
             """);
             if (escolha.equals("1") || escolha.equals("2") || escolha.equals("3") || escolha.equals("4")) {
-                break; // válido, sai do loop
+                break;
             }
             System.out.println("Digite uma opção válida!");
         }
@@ -297,8 +291,8 @@ public class Main {
         }
         String sigla = Leitura.dados("Digite a sigla referente ao curso:");
 
-        while(sigla.isBlank() && sigla.length() > 5){
-            System.out.println("Sigla INVÁLIDA");
+        while(!ValidarSigla(sigla)){
+            System.out.println("Sigla INVÁLIDA! Não pode ser repetida, nem maior que 6 caracteres.");
             sigla = Leitura.dados("Digite a sigla referente ao curso:");
         }
 
@@ -309,10 +303,7 @@ public class Main {
 
         Turmas();
     }
-    public static boolean ValidarTextos(String Texto){
-        String TextoSemNumeros = Texto.replaceAll("\\d","");
-        return !Texto.isBlank() && Texto.equals(TextoSemNumeros);
-    }
+
     public static void edit_turma (){
         System.out.println(" == Turmas Disponiveis == ");
         if(listaTurmas.isEmpty()) {
@@ -324,7 +315,7 @@ public class Main {
             }
         }
         String sigla = Leitura.dados("Digite a sigla da turma a ser editada:");
-        while(sigla.isBlank() && sigla.length() > 5){
+        while(!ValidarSigla(sigla)){
             System.out.println("Sigla INVÁLIDA");
             sigla = Leitura.dados("Digite a sigla da turma a ser editada:");
         }
@@ -356,6 +347,10 @@ public class Main {
                     NovoCurso = Leitura.dados("Digite o nome do aluno:");
                 }
                 String NovaSigla = Leitura.dados("Digite a sigla referente ao curso:");
+                while(!ValidarSigla(NovaSigla)){
+                    System.out.println("Sigla INVÁLIDA");
+                    sigla = Leitura.dados("Digite a sigla da turma a ser editada:");
+                }
                 T.setCurso(NovoCurso);
                 T.setSigla(NovaSigla);
                 T.setPeriodo(periodoEscolhido);
@@ -393,5 +388,23 @@ public class Main {
             listaTurmas.remove(turma);
             System.out.println("Turma Removida com sucesso!");
         }
+    }
+    public static boolean ValidarTextos(String Texto){
+        String TextoSemNumeros = Texto.replaceAll("\\d","");
+        return !Texto.isBlank() && Texto.equals(TextoSemNumeros);
+    }
+
+    public static boolean ValidarSigla(String sigla){
+        if (sigla.isBlank()) return false;
+
+        for (Turma T : listaTurmas)
+        {
+            if (T.getSigla().equalsIgnoreCase(sigla)){
+                return false;
+            }
+        }
+        String SiglaCorreta = sigla.replaceAll("\\s","");
+
+        return sigla.equals(SiglaCorreta) && sigla.length() < 7 && true;
     }
 }

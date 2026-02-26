@@ -9,6 +9,7 @@ public class Main {
     public static void main(String[] args) {
         menu();
     }
+
     public static void menu(){
         System.out.println(" == Secretaria == ");
         System.out.println("""
@@ -260,7 +261,7 @@ public class Main {
         if (aluno == null){
             System.out.println("Aluno não encontrado.");
         }
-        else {
+        else if (ConfirmaExclusão()){
             listaAlunos.remove(aluno);
             System.out.println("Aluno removido com sucesso!");
         }
@@ -425,6 +426,7 @@ public class Main {
 
     public static boolean ConfirmaExclusão (){
         String confirmar = Leitura.dados("Você tem certea (S/N)? ");
+        confirmar = confirmar.toUpperCase();
 
         switch (confirmar){
             case "S":

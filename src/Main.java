@@ -107,40 +107,55 @@ public class Main {
         }
         Alunos();
     }
+    public static boolean validarDataNascimento(String data){
+        if (data.isBlank()) return false;
+
+        LocalDate dataNascimento = null;
+
+        try {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+            dataNascimento = LocalDate.parse(data, formatter);
+
+        } catch (Exception e) {
+            System.out.println("Data Inválida! Use o formato dd/mm/yyyy");
+            return false;
+        }
+        return true;
+    }
     public static void add_aluno (){
         String Nome = Leitura.dados("Digite o nome do aluno:");
         while (!ValidarTextos(Nome)) {
             System.out.println("Nome INVÁLIDO! Não utilize numeros e nem caracteres especias");
             Nome = Leitura.dados("Digite o nome do aluno:");
         }
-        String data = Leitura.dados("Digite a data de nascimento do aluno:");
-        System.out.println(" == Turmas Disponiveis == ");
+        String data;
+        do{
+             data = Leitura.dados("Digite a data de nascimento do aluno:");
+        }while (!validarDataNascimento(data));
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        LocalDate dataNascimento = LocalDate.parse(data, formatter);
+
         if (listaTurmas.isEmpty()) {
-            System.out.println("Está lista está vazia!! \n");
+            System.out.println("É impossível cadastrar aluno sem turmas existentes\n");
             Alunos();
         } else {
+            System.out.println(" == Turmas Disponiveis == ");
             for (Turma T : listaTurmas) {
                 System.out.println(" - " + T);
             }
         }
-        String sigla = Leitura.dados("Escolha uma das turmas disponiveis pela sigla:");
         Turma turma = null;
-        for (Turma T : listaTurmas) {
-            if (T.getSigla().equalsIgnoreCase(sigla)) {
-                turma = T;
-                break;
+        while (turma == null) {
+            String sigla = Leitura.dados("Escolha uma das turmas disponiveis pela sigla:");
+            for (Turma T : listaTurmas) {
+                if (T.getSigla().equalsIgnoreCase(sigla)) {
+                    turma = T;
+                    break;
+                }
             }
-        }
-        if (turma == null) {
-            System.out.println("Turma não encontrada.");
-        }
-        LocalDate dataNascimento = null;
-        try {
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-            dataNascimento = LocalDate.parse(data, formatter);
-        } catch (Exception e) {
-            System.out.println("Data Inválida! Use o formato dd/mm/yyyy");
-            return;
+            if (turma == null) {
+                System.out.println("Turma não encontrada.");
+            }
         }
         Aluno aluno = new Aluno(Nome, dataNascimento, turma);
         System.out.println("Aluno Criado com sucesso");
@@ -380,12 +395,15 @@ public class Main {
         }
         if (turma == null){
             System.out.println("Turma não encontrada.");
+            excluir_turma();
         }
-        else {
+        else if (ConfirmaExclusão()){
             listaTurmas.remove(turma);
             System.out.println("Turma Removida com sucesso!");
         }
+        Turmas();
     }
+
     public static boolean ValidarTextos(String Texto){
         String TextoSemNumeros = Texto.replaceAll("\\d","");
         return !Texto.isBlank() && Texto.equals(TextoSemNumeros);
@@ -403,5 +421,19 @@ public class Main {
         String SiglaCorreta = sigla.replaceAll("\\s","");
 
         return sigla.equals(SiglaCorreta) && sigla.length() < 7;
+    }
+
+    public static boolean ConfirmaExclusão (){
+        String confirmar = Leitura.dados("Você tem certea (S/N)? ");
+
+        switch (confirmar){
+            case "S":
+                return true;
+            case "N":
+                return false;
+            default:
+                System.out.println("Opção inválida, digite S para sim ou N para não");
+                return ConfirmaExclusão();
+        }
     }
 }

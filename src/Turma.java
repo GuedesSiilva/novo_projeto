@@ -14,6 +14,15 @@ public class Turma {
     public String getSigla(){
         return sigla;
     }
+
+    public Periodo getPeriodo() {
+        return periodo;
+    }
+
+    public String getCurso() {
+        return curso;
+    }
+
     public String toString(){
         return curso + " | " + sigla + " | " + periodo;
     }

@@ -22,6 +22,18 @@ public class Aluno {
         return id;
     }
 
+    public Turma getTurma() {
+        return turma;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public LocalDate getDataNascimento() {
+        return dataNascimento;
+    }
+
     public String toString(){
         return id + " | " + nome + " | " + dataNascimento + " | " + turma;
     }

@@ -1,11 +1,12 @@
 import java.time.LocalDate;
 
-public class Aluno {
+public class Aluno implements Ativavel{
     private static int contador = 0;
     private int id;
     private String nome;
     private LocalDate dataNascimento;
     private Turma turma;
+    private boolean ativo;
 
     public Aluno(String nome, LocalDate dataNascimento, Turma turma){
         this.nome = nome;
@@ -33,6 +34,15 @@ public class Aluno {
     public LocalDate getDataNascimento() {
         return dataNascimento;
     }
+
+    public boolean isAtivo() {
+        return ativo;
+    }
+    public void setAtivo(boolean ativo){
+        this.ativo =ativo;
+    }
+
+
 
     public String toString(){
         return id + " | " + nome + " | " + dataNascimento + " | " + turma;

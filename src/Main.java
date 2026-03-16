@@ -1,7 +1,7 @@
+import java.lang.reflect.InvocationTargetException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.time.format.DateTimeFormatter;
-import java.util.Set;
 
 public class Main {
     private static ArrayList<Aluno> listaAlunos = new ArrayList<>();
@@ -13,7 +13,7 @@ public class Main {
 
     public static void menu(){
         System.out.println(" == Secretaria == ");
-        System.out.println("""
+        System.out.println("""  
                 1 - Alunos
                 2 - Turmas
                 3 - Sair
@@ -47,16 +47,16 @@ public class Main {
         String opcao = Leitura.dados("Digite a opção desejada:");
         switch (opcao){
             case "1":
-                listar_alunos();
+                listarAlunos();
                 break;
             case "2":
-                add_aluno();
+                addAluno();
                 break;
             case "3":
-                edit_aluno();
+                editAluno();
                 break;
             case "4":
-                excluir_aluno();
+                excluirAluno();
                 break;
             case "5":
                 menu();
@@ -78,16 +78,20 @@ public class Main {
         String opcao = Leitura.dados("Digite a opção desejada:");
         switch (opcao){
             case "1":
-                listar_turmas();
+                listarTurmas();
+                Turmas();
                 break;
             case "2":
-                add_turma();
+                addTurma();
+                Turmas();
                 break;
             case "3":
-                edit_turma();
+                editTurma();
+                Turmas();
                 break;
             case "4":
-                excluir_turma();
+                excluirTurma();
+                Turmas();
                 break;
             case "5":
                 menu();
@@ -97,7 +101,7 @@ public class Main {
                 Turmas();
         }
     }
-    public static void listar_alunos (){
+    public static void listarAlunos(){
         System.out.println(" == Alunos Listados == ");
         if(listaAlunos.isEmpty()) {
             System.out.println("Está lista está vazia!!! \n");
@@ -107,16 +111,14 @@ public class Main {
                 System.out.println(A);
             }
         }
-        Alunos();
     }
     public static boolean validarDataNascimento(String data){
         if (data.isBlank()) return false;
 
-        LocalDate dataNascimento = null;
 
         try {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-            dataNascimento = LocalDate.parse(data, formatter);
+            LocalDate.parse(data, formatter);
 
         } catch (Exception e) {
             System.out.println("Data Inválida! Use o formato dd/mm/yyyy");
@@ -124,7 +126,8 @@ public class Main {
         }
         return true;
     }
-    public static void add_aluno (){
+
+    public static void addAluno(){
         String Nome = Leitura.dados("Digite o nome do aluno:");
         while (ValidarTextos(Nome)) {
             System.out.println("Nome INVÁLIDO! Não utilize numeros e nem caracteres especias");
@@ -164,94 +167,34 @@ public class Main {
         listaAlunos.add(aluno);
         Alunos();
     }
-    public static void edit_aluno (){
-        System.out.println(" == Alunos Listados == ");
-        if(listaAlunos.isEmpty()) {
-            System.out.println("Está lista está vazia!!! \n");
-            Alunos();
-        }else {
-            for (Aluno A : listaAlunos) {
-                System.out.println(A);
-            }
-        }
-        int idAluno = -1;
-        while (idAluno == -1){
+    public static void editAluno(){
+       listarAlunos();
+        int idEditar = -1;
+        while (idEditar == -1){
             String escolha = Leitura.dados("Digite o id do aluno a ser editado:");
             try {
-                    idAluno = Integer.parseInt(escolha);
+                    idEditar = Integer.parseInt(escolha);
             } catch (NumberFormatException e) {
                 System.out.println("Valor inválido! Digite apenas números.");
             }
         }
         boolean achou = false;
         for (Aluno A : listaAlunos){
-            if(A.getId() == idAluno){
+            if(A.getId() == idEditar){
                 achou = true;
-                if (Confirmacao()){
+                if (Confirmacao("Você tem certeza??")){
+
                     System.out.println("O nome atual é " + A.getNome());
-                    String escolha = Leitura.dados("Voce desejar alterar o nome atual? [S/N]");
-                    escolha = escolha.toUpperCase();
-                    switch (escolha){
-                        case "S":
-                            String NovoNome = Leitura.dados("Qual o novo nome da lista?");
-                            while (ValidarTextos(NovoNome)) {
-                                System.out.println("Nome INVÁLIDO! Não utilize numeros e nem caracteres especias");
-                                NovoNome = Leitura.dados("Digite o nome do aluno:");
-                            }
-                            A.setNome(NovoNome);
-                        case "N":
-                            break;
-                        default:
-                            System.out.println("Opção inválida digite S ou N!!");
-                    }
+                    if (Confirmacao("Você deseja alterar o nome? "))
+                           // atualizarNome(A);
+
                     System.out.println("A data de nascimento atual é " + A.getDataNascimento());
-                    String escolhaData = Leitura.dados("Voce desejar alterar a data de nascimento atual? [S/N]");
-                    escolhaData = escolhaData.toUpperCase();
-                    switch (escolhaData){
-                        case "S":
-                            String data = Leitura.dados("Digite a data de nascimento do aluno:");
-                            LocalDate Novadata;
-                            try {
-                                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-                                Novadata = LocalDate.parse(data, formatter);
-                            }catch (Exception e){
-                                System.out.println("Data Inválida! Use o formato dd/mm/yyyy");
-                                return;
-                            }
-                            A.setDataNascimento(Novadata);
-                        case "N":
-                            break;
-                        default:
-                            System.out.println("Opção inválida digite S ou N!!");
-                    }
-                    System.out.println("O curso atual de " + A.getNome() + " é: " + listaTurmas.get(idAluno - 1).getCurso());
-                    String escolhaCurso = Leitura.dados("Voce desejar alterar o curso atual? [S/N]");
-                    escolhaCurso = escolhaCurso.toUpperCase();
-                    switch (escolhaCurso) {
-                        case "S":
-                            String sigla = Leitura.dados("Escolha uma das turmas disponiveis pela sigla:");
-                            while (sigla.isBlank() && sigla.length() > 5) {
-                                System.out.println("Sigla INVÁLIDA");
-                                sigla = Leitura.dados("Escolha uma das turmas disponiveis pela sigla:");
-                            }
-                            sigla = sigla.toUpperCase();
-                            Turma NovaTurma = null;
-                            for (Turma T : listaTurmas) {
-                                if (T.getSigla().equalsIgnoreCase(sigla)) {
-                                    NovaTurma = T;
-                                    break;
-                                }
-                            }
-                            if (NovaTurma == null) {
-                                System.out.println("Turma não encontrada. Aluno não cadastrado");
-                                Alunos();
-                            }
-                            A.setTurma(NovaTurma);
-                        case "N":
-                            break;
-                        default:
-                            System.out.println("Opção inválida digite S ou N!!");
-                    }
+                    if (Confirmacao("Você deseja alterar a idade?"))
+                        atualizarIdade(A);
+
+                    System.out.println("O curso atual de " + A.getNome() + " é: " + listaTurmas.get(idEditar - 1).getCurso());
+                   if (Confirmacao("Deseja alterar o curso?"))
+                       atualizarCursoAluno(A);
                 }
                 System.out.println("Aluno editado com Sucesso!");
                 break;
@@ -259,20 +202,12 @@ public class Main {
         }
     if (!achou){
             System.out.println("Aluno não existe, Digite uma opção VÁLIDA!!");
-            edit_aluno();
+            editAluno();
         }
         Alunos();
     }
-    public static void excluir_aluno (){
-        System.out.println(" == Alunos cadastrados no sistema == ");
-        if(listaAlunos.isEmpty()) {
-            System.out.println("Está lista está vazia!!! \n");
-            Alunos();
-        }else{
-            for (Aluno A : listaAlunos) {
-                System.out.println(" - " +A);
-            }
-        }
+    public static void excluirAluno(){
+       listarAlunos();
         String id = Leitura.dados("Digite o id do aluno a ser removido:");
         int idSelecionado = Integer.parseInt(id);
         Aluno aluno = null ;
@@ -285,13 +220,13 @@ public class Main {
         if (aluno == null){
             System.out.println("Aluno não encontrado.");
         }
-        else if (Confirmacao()){
+        else if (Confirmacao("Você tem certeza?")){
             listaAlunos.remove(aluno);
             System.out.println("Aluno removido com sucesso!");
         }
         Alunos();
     }
-    public static void listar_turmas (){
+    public static void listarTurmas(){
         System.out.println(" == Turmas Disponiveis == ");
         if(listaTurmas.isEmpty()) {
             System.out.println("Está lista está vazia!!! \n");
@@ -301,9 +236,8 @@ public class Main {
                 System.out.println(T);
             }
         }
-        Turmas();
     }
-    public static void add_turma (){
+    public static void addTurma(){
         String escolha;
         while (true) {
             escolha = Leitura.dados("""
@@ -337,126 +271,42 @@ public class Main {
         Turma turma = new Turma(Curso,sigla,periodoEscolhido);
         listaTurmas.add(turma);
         System.out.println("Turma criada com sucesso!!");
-
-        Turmas();
     }
 
-    public static void edit_turma (){
-        System.out.println(" == Turmas Disponiveis == ");
-        if(listaTurmas.isEmpty()) {
-            System.out.println("Está lista está vazia!!! \n");
-            Alunos();
-        }else{
-            for (Turma T : listaTurmas) {
-                System.out.println(" - " +T);
-            }
+    public static void editTurma(){
+        if (isVazio(listaTurmas)) {
+            System.out.println("Não há turmas cadastradas");
+            return;
         }
-        String escolha;
-        String sigla = Leitura.dados("Digite a sigla da turma a ser editada:");
-        sigla = sigla.toUpperCase();
-        Turma NovaTurma = null;
-        for (Turma T : listaTurmas) {
-            if (T.getSigla().equalsIgnoreCase(sigla)){
-                NovaTurma = T;
-                if(Confirmacao()){
-                    System.out.println("O perido atual da turma "+ T.getSigla() + " é: " + T.getPeriodo());
-                    escolha = Leitura.dados("Deseja alterar o periodo atual? [S/N]");
-                    escolha = escolha.toUpperCase();
-                    switch (escolha) {
-                        case "S":
-                            while (true) {
-                                escolha = Leitura.dados("""
-                                Escolha qual é o periodo da turma:
-                                1 - MATUTINO
-                                2 - VESPERTINO
-                                3 - NOTURNO
-                                4 - INTEGRAL
-                                """);
-                                if (escolha.equals("1") || escolha.equals("2") || escolha.equals("3") || escolha.equals("4")) {
-                                    break;
-                                }
-                                System.out.println("Digite uma opção válida!");
-                            }
-                            int opcao = Integer.parseInt(escolha);
-                            Periodo[] periodos = Periodo.values();
-                            Periodo periodoEscolhido = periodos[opcao-1];
-                            T.setPeriodo(periodoEscolhido);
-                            System.out.println("== Periodo Atualizado com Sucesso ==");
-                        case "N":
-                            break;
-                        default:
-                            System.out.println("Opção inválida digite S ou N!!");
-                    }
-                    System.out.println("O Curso atual da turma "+ T.getSigla() + " é: " + T.getCurso());
-                    String escolhaCurso = Leitura.dados("Deseja alterar o curso atual? [S/N]");
-                    escolhaCurso = escolhaCurso.toUpperCase();
-                    switch (escolhaCurso){
-                        case "S":
-                            String NovoCurso = Leitura.dados("Digite o nome do curso:");
-                            while (ValidarTextos(NovoCurso)) {
-                                System.out.println("Nome INVÁLIDO! Não utilize números e nem caracteres especias");
-                                NovoCurso = Leitura.dados("Digite o nome do aluno:");
-                            }
-                            T.setCurso(NovoCurso);
-                            System.out.println("== Curso Atualizado com Sucesso ==");
-                        case "N":
-                            break;
-                        default:
-                            System.out.println("Opção inválida digite S ou N!!");
-                    }
-                    System.out.println("A sigla atual é " + T.getSigla());
-                    String escolhaSigla = Leitura.dados("Deseja alterar a sigla atual? [S/N]");
-                    escolhaSigla = escolhaSigla.toUpperCase();
-                    switch (escolhaSigla){
-                        case "S":
-                            String NovaSigla = Leitura.dados("Digite a sigla referente ao curso:");
-                            while(ValidarSigla(NovaSigla)){
-                                System.out.println("Sigla INVÁLIDA! Não pode ser repetida, nem maior que 6 caracteres.");
-                                sigla = Leitura.dados("Digite a sigla da turma a ser editada:");
-                            }
-                            T.setSigla(NovaSigla);
-                            System.out.println("== Sigla Atualizada com Sucesso ==");
-                        case "N":
-                            break;
-                        default:
-                            System.out.println("Opção inválida digite S ou N!!");
-                    }
-                }
-            }
-        }
-        if (NovaTurma == null){
-            System.out.println("Turma não encontrada. Digite novamente!!");
-            edit_turma();
-        }
-        Turmas();
+
+        listarTurmasIndiceSigla();
+
+        int idAtualizar = validaIdTurma();
+
+        System.out.printf("O período atual é: %s", listaTurmas.get(idAtualizar).getPeriodo());
+        atualizarParcial("período", idAtualizar);
+
+        System.out.printf("O curso atual é: %s", listaTurmas.get(idAtualizar).getCurso());
+        atualizarParcial("curso", idAtualizar);
+
+        System.out.printf("A sigla atual é: %s", listaTurmas.get(idAtualizar).getSigla());
+        atualizarParcial("sigla", idAtualizar);
+
     }
-    public static void excluir_turma (){
-        System.out.println(" == Turmas Disponiveis == ");
-        if(listaTurmas.isEmpty()) {
-            System.out.println("Está lista está vazia!!! \n");
-            Alunos();
-        }else{
-            for (Turma T : listaTurmas) {
-                System.out.println(" - " +T);
-            }
+    private static void excluirTurma() {
+        if(isVazio(listaTurmas)) {
+            System.out.println("Não há turmas cadastradas");
+            return;
         }
-        String sigla = Leitura.dados("Escolha uma das turmas disponiveis pela sigla:");
-        Turma turma = null;
-        for (Turma T : listaTurmas) {
-            if (T.getSigla().equalsIgnoreCase(sigla)){
-                turma = T;
-                break;
-            }
+
+        listarTurmasIndiceSigla();
+
+        int idExcluir = validaIdTurma();
+
+        if (Confirmacao("Deseja excluir está turma??")){
+            listaTurmas.get(idExcluir).setAtivo(false);
+            System.out.println("Turma excluída com sucesso!");
         }
-        if (turma == null){
-            System.out.println("Turma não encontrada.");
-            excluir_turma();
-        }
-        else if (Confirmacao()){
-            listaTurmas.remove(turma);
-            System.out.println("Turma Removida com sucesso!");
-        }
-        Turmas();
     }
 
     public static boolean ValidarTextos(String Texto){
@@ -478,8 +328,8 @@ public class Main {
         return !sigla.equals(SiglaCorreta) || sigla.length() >= 7;
     }
 
-    public static boolean Confirmacao (){
-        String confirmar = Leitura.dados("Você tem certeza ? (S/N)");
+    public static boolean Confirmacao (String mensagem){
+        String confirmar = Leitura.dados(mensagem + " (S/N)");
         confirmar = confirmar.toUpperCase();
 
         return switch (confirmar) {
@@ -487,8 +337,174 @@ public class Main {
             case "N" -> false;
             default -> {
                 System.out.println("Opção inválida, digite S para sim ou N para não");
-                yield Confirmacao();
+                yield Confirmacao(mensagem);
             }
         };
+    }
+
+    private static <T extends Ativavel> boolean isVazio(ArrayList<T> lista) {
+        if (lista.isEmpty()) return true;
+
+        for (T item : lista){
+            if (item.isAtivo()) return false;
+        }
+
+        return true;
+    }
+
+    private static void listarTurmasIndiceSigla() {
+        System.out.println("\nLista das Turmas:");
+        for (int i=0;i<listaTurmas.size();i++){
+            if (listaTurmas.get(i).isAtivo())
+                System.out.printf("\n%d - %s",i+1, listaTurmas.get(i).getSigla());
+        }
+    }
+
+
+    public static void atualizarParcial(String atributo, int idEditar){
+        boolean rodarNovamente = true;
+        while (rodarNovamente){
+            String opcao = Leitura.dados("\nDeseja modificar "+ atributo +" ? (S/N): ").toUpperCase();
+            switch (opcao) {
+                case "S":
+                    switch (atributo){
+                        case "período":
+                            Periodo periodo = validarPeriodo();
+                            listaTurmas.get(idEditar).setPeriodo(periodo);
+                            break;
+                        case "curso":
+                            String curso = validarCursoTurma();
+                            listaTurmas.get(idEditar).setCurso(curso);
+                            break;
+                        case "sigla":
+                            String sigla = validarSiglaTurma();
+                            sigla = sigla.toUpperCase();
+                            listaTurmas.get(idEditar).setSigla(sigla);
+                            break;
+                    }
+                    System.out.println(atributo + " atualizado com sucesso!");
+                    rodarNovamente = false;
+                    break;
+                case "N":
+                    rodarNovamente = false;
+                    break;
+                default:
+                    System.out.println("Opção inválida! Escolha S para SIM ou N para NÃO");
+            }
+        }
+    }
+
+    public static void validarNome(){
+        String NovoNome = Leitura.dados("Qual o novo nome da lista?");
+        while (ValidarTextos(NovoNome)) {
+            System.out.println("Nome INVÁLIDO!");
+            NovoNome = Leitura.dados("Digite o nome do aluno:");
+        }
+    }
+
+    public static void atualizarIdade(Aluno A){
+        String data = Leitura.dados("Digite a data de nascimento do aluno:");
+        LocalDate Novadata;
+        try {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+            Novadata = LocalDate.parse(data, formatter);
+        }catch (Exception e){
+            System.out.println("Data Inválida! Use o formato dd/mm/yyyy");
+            return;
+        }
+        A.setDataNascimento(Novadata);
+    }
+    public static void atualizarCursoAluno(Aluno A){
+        listarTurmas();
+        String sigla = Leitura.dados("Escolha uma das turmas disponiveis pela sigla:");
+        while (sigla.isBlank() && sigla.length() > 5) {
+            System.out.println("Sigla INVÁLIDA");
+            sigla = Leitura.dados("Escolha uma das turmas disponiveis pela sigla:");
+        }
+        Turma NovaTurma = null;
+        for (Turma T : listaTurmas) {
+            if (T.getSigla().equalsIgnoreCase(sigla)) {
+                NovaTurma = T;
+                break;
+            }
+        }
+        if (NovaTurma == null) {
+            System.out.println("Turma não encontrada. Aluno não cadastrado");
+            Alunos();
+        }
+        A.setTurma(NovaTurma);
+    }
+    public static Periodo validarPeriodo(){
+        while (true) {
+            String escolha = Leitura.dados("""
+                                Escolha qual é o periodo da turma:
+                                1 - MATUTINO
+                                2 - VESPERTINO
+                                3 - NOTURNO
+                                4 - INTEGRAL
+                                """);
+            switch (escolha){
+                case "1":
+                    return Periodo.MATUTINO;
+                case "2":
+                    return Periodo.VESPERTINO;
+                case "3":
+                    return Periodo.NOTURNO;
+                case "4":
+                    return Periodo.INTEGRAL;
+                default:
+                    System.out.println("Opção inválida, digite novamente");
+                    return validarPeriodo();
+            }
+        }
+    }
+
+
+    public static String validarCursoTurma(){
+        String NovoCurso = Leitura.dados("Digite o nome do curso:");
+        while (ValidarTextos(NovoCurso)) {
+            System.out.println("Nome INVÁLIDO! Não utilize números e nem caracteres especias");
+            NovoCurso = Leitura.dados("Digite o nome do curso:");
+        }
+        return NovoCurso;
+    }
+    public static String validarSiglaTurma(){
+        String NovaSigla = Leitura.dados("Digite a sigla referente ao curso:");
+        while(ValidarSigla(NovaSigla)){
+            System.out.println("Sigla INVÁLIDA! Não pode ser repetida, nem maior que 6 caracteres.");
+            NovaSigla = Leitura.dados("Digite a sigla da turma a ser editada:");
+        }
+        return NovaSigla;
+    }
+
+    private static int validaIdTurma() {
+        String opcao = Leitura.dados("\nDigite o número da turma desejada: ");
+        int opcaoValida = -1;
+        int opcaoUsuario = -1;
+        while (opcaoValida==-1){
+            opcaoUsuario = validarItemLista(opcao);
+
+            if (opcaoUsuario==-1) {
+                System.out.println("Opção inválida! Digite novamente: ");
+                opcao = Leitura.dados("Digite o número da turma desejada: ");
+            } else {
+                opcaoValida = opcaoUsuario;
+            }
+        }
+        return opcaoValida;
+    }
+    private static int validarItemLista(String opcao) {
+        if (opcao.isBlank()) return -1;
+
+        int opcaoNumero = -1;
+
+        try{
+            opcaoNumero = Integer.parseInt(opcao);
+        } catch (NumberFormatException e) {
+            return -1;
+        }
+
+        int indiceLista = opcaoNumero-1;
+        return indiceLista >= 0 && listaTurmas.size() > indiceLista ? indiceLista : -1;
     }
 }

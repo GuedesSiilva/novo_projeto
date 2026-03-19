@@ -1,4 +1,5 @@
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 public class Aluno implements Ativavel{
     private static int contador = 0;
@@ -14,10 +15,7 @@ public class Aluno implements Ativavel{
         contador++;
         this.id = contador;
         this.turma = turma;
-    }
-
-    public static int getContador() {
-        return contador;
+        this.ativo = true;
     }
     public int getId(){
         return id;
@@ -38,6 +36,7 @@ public class Aluno implements Ativavel{
     public boolean isAtivo() {
         return ativo;
     }
+
     public void setAtivo(boolean ativo){
         this.ativo =ativo;
     }
@@ -45,7 +44,9 @@ public class Aluno implements Ativavel{
 
 
     public String toString(){
-        return id + " | " + nome + " | " + dataNascimento + " | " + turma;
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        String dataformatada = dataNascimento.format(formatter);
+        return nome + " | " + dataformatada + " | " + turma;
     }
 
     public void setNome(String nome) {
